@@ -77,7 +77,7 @@ public class GestureReceiver : InputSource
         foreach (var pointer in e.Pointers){
             Debug.Log($"Released[{pointer.Position.x},{pointer.Position.y}]");
 
-            Vector3 start = new Vector3(startPos.x, startPos.y, 10);
+            Vector3 start = new Vector3(startPos.x, startPos.y, 1);
             Vector3 end = new Vector3(pointer.Position.x, pointer.Position.y, 1);
             Vector3 sPos = arCamera.ScreenToWorldPoint(start);
             Vector3 ePos = arCamera.ScreenToWorldPoint(end);
@@ -101,7 +101,7 @@ public class GestureReceiver : InputSource
             var side = Vector3.Cross(dir, arCamera.transform.forward);
 
             var obj = new GameObject("Triangle Object");
-            var renderer = obj.AddComponent<MeshRenderer>();
+            var meshRenderer = obj.AddComponent<MeshRenderer>();
             var filter = obj.AddComponent<MeshFilter>();
             var mesh = new Mesh();
             float width = 0.1f;
@@ -109,7 +109,7 @@ public class GestureReceiver : InputSource
             mesh.vertices = new Vector3[]{sPos + side*width, ePos, sPos-side*width};
             mesh.colors = new Color[]{Color.red, Color.green, Color.blue};
             mesh.triangles = new int[]{0,1,2};
-            renderer.material = material;
+            meshRenderer.material = material;
             break;
         }
     }

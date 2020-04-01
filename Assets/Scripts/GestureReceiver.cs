@@ -23,8 +23,9 @@ public class GestureReceiver : InputSource
         }
 
         var obj = GameObject.Find("AR Camera");
-        arCamera = obj.GetComponent<Camera>();
-
+        if( obj != null ){
+            arCamera = obj.GetComponent<Camera>();
+        }
     }
 
     protected override void OnDisable()

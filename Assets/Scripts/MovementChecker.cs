@@ -12,6 +12,9 @@ public class MovementChecker : GestureReceiver
     Material material;
     private Vector2 startPos;
 
+    List<GameObject> objectList = new List<GameObject>();
+    const int MAX_OBJECTS = 20;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -74,6 +77,14 @@ public class MovementChecker : GestureReceiver
             mesh.colors = new Color[]{Color.red, Color.green, Color.blue};
             mesh.triangles = new int[]{0,1,2};
             meshRenderer.material = material;
+
+            if( objectList.Count >= MAX_OBJECTS ){
+                var removeObj = objectList[0];
+                objectList.RemoveAt(0);
+                GameObject.Destroy(removeObj);
+            }
+            objectList.Add(obj);
+
             break;
         }
     }

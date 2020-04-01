@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using TouchScript;
-using TouchScript.InputSources;
-using TouchScript.Pointers;
-using TouchScript.Gestures;
+using TouchScript.Layers;
+// using TouchScript.InputSources;
+// using TouchScript.Pointers;
+// using TouchScript.Gestures;
 
 public class MovementChecker : GestureReceiver
 {
@@ -19,6 +20,8 @@ public class MovementChecker : GestureReceiver
     void Start()
     {
         material = new Material(Shader.Find("Custom/VertexColorShader"));
+        var layer = GetComponent<StandardLayer>();
+        layer.UseHitFilters = true;
     }
 
     // Update is called once per frame
@@ -27,7 +30,7 @@ public class MovementChecker : GestureReceiver
         
     }
 
-    protected override void pointersPressedHandler(object sender, PointerEventArgs e)
+    protected override void onPressed(PointerEventArgs e)
     {
         foreach (var pointer in e.Pointers){
             Debug.Log($"Pressed[{pointer.Position.x},{pointer.Position.y}]");
@@ -39,7 +42,7 @@ public class MovementChecker : GestureReceiver
     }
 
 
-    protected override void pointersReleasedHandler(object sender, PointerEventArgs e)
+    protected override void onReleased(PointerEventArgs e)
     {
         foreach (var pointer in e.Pointers){
             Debug.Log($"Released[{pointer.Position.x},{pointer.Position.y}]");

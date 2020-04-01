@@ -2,23 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TouchScript;
-using TouchScript.InputSources;
+using TouchScript.Layers;
 
 
-public class GestureReceiver : InputSource
+public class GestureReceiver : MonoBehaviour
 {
     protected Camera arCamera;
 
 
-    protected override void OnEnable()
+    protected void OnEnable()
     {
-        base.OnEnable();
-        // gesture = GetComponent<MetaGesture>();
-        // if (gesture)
-        if( TouchManager.Instance != null )
-        {
-            var tc = TouchManager.Instance;
+        var tc = TouchManager.Instance;
+        if( tc != null ){
             tc.PointersPressed += pointersPressedHandler;
+            tc.PointersUpdated += pointersUpdatedHandler;
             tc.PointersReleased += pointersReleasedHandler;
         }
 
@@ -26,27 +23,47 @@ public class GestureReceiver : InputSource
         if( obj != null ){
             arCamera = obj.GetComponent<Camera>();
         }
+
+        var layer = GetComponent<StandardLayer>();
+        if(layer!=null){
+            // layer.UseHitFilters = true;
+        }
     }
 
-    protected override void OnDisable()
+    protected void OnDisable()
     {
-        base.OnDisable();
-
-        // if (gesture)
-        if( TouchManager.Instance != null )
-        {
-            var tc = TouchManager.Instance;
+        var tc = TouchManager.Instance;
+        if( tc != null ){
             tc.PointersPressed -= pointersPressedHandler;
+            tc.PointersUpdated -= pointersUpdatedHandler;
             tc.PointersReleased -= pointersReleasedHandler;
         }
     }
 
-    protected virtual void pointersPressedHandler(object sender, PointerEventArgs e)
+    protected void pointersPressedHandler(object sender, PointerEventArgs e)
+    {
+        onPressed(e);
+    }
+
+    protected void pointersUpdatedHandler(object sender, PointerEventArgs e)
+    {
+        onUpdated(e);
+    }
+
+    protected void pointersReleasedHandler(object sender, PointerEventArgs e)
+    {
+        onReleased(e);
+    }
+
+    protected virtual void onPressed(PointerEventArgs e)
     {
     }
 
+    protected virtual void onUpdated(PointerEventArgs e)
+    {
+    }
 
-    protected virtual void pointersReleasedHandler(object sender, PointerEventArgs e)
+    protected virtual void onReleased(PointerEventArgs e)
     {
     }
 

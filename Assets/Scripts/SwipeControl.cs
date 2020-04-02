@@ -67,11 +67,17 @@ public class SwipeControl : GestureReceiver
             float delta = 0;
             if( name == "PanelRollControl" ){
                 delta = diff.x / 10;
-                targetObject.transform.rotation *= Quaternion.AngleAxis(delta, -arCamera.transform.forward);
+                var axis = -arCamera.transform.forward;
+                var revRot = Quaternion.Inverse(targetObject.transform.rotation);
+                axis = Matrix4x4.Rotate(revRot).MultiplyPoint3x4(axis);
+                targetObject.transform.rotation *= Quaternion.AngleAxis(delta, axis);
             }
             else if( name == "PanelPitchControl" ){
                 delta = diff.y / 10;
-                targetObject.transform.rotation *= Quaternion.AngleAxis(delta, arCamera.transform.right);
+                var axis = arCamera.transform.right;
+                var revRot = Quaternion.Inverse(targetObject.transform.rotation);
+                axis = Matrix4x4.Rotate(revRot).MultiplyPoint3x4(axis);
+                targetObject.transform.rotation *= Quaternion.AngleAxis(delta, axis);
             }
             else if(dragging) {
                 Vector3 start = new Vector3(prevPos.x, prevPos.y, 1);
@@ -81,7 +87,10 @@ public class SwipeControl : GestureReceiver
                 var dir = (ePos - sPos).normalized;
 
                 var d = Vector3.Dot(-targetObject.transform.right, dir);
-                targetObject.transform.rotation *= Quaternion.AngleAxis(d*2, targetObject.transform.up);
+                var axis = targetObject.transform.up;
+                var revRot = Quaternion.Inverse(targetObject.transform.rotation);
+                axis = Matrix4x4.Rotate(revRot).MultiplyPoint3x4(axis);
+                targetObject.transform.rotation *= Quaternion.AngleAxis(d*2, axis);
             }
 
             prevPos = pointer.Position;
